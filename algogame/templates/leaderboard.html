@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="leaderboard-container">
+    <h1>🏆 Leaderboard</h1>
+    <p class="subtitle">Top performers across all algorithms</p>
+    
+    <div class="leaderboard-stats">
+        <div class="stats-card">
+            <h3>📊 Statistics</h3>
+            <div class="stat-item">
+                <span>Total Players:</span>
+                <span>{{ leaders|length }}</span>
+            </div>
+            <div class="stat-item">
+                <span>Best Efficiency:</span>
+                <span>{{ leaders[0][2] if leaders else 0 }}%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="leaderboard-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Algorithm</th>
+                    <th>Efficiency</th>
+                    <th>Level</th>
+                    <th>Difficulty</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leader in leaders %}
+                <tr class="leader-row">
+                    <td class="rank">
+                        {% if loop.index == 1 %} 🥇 
+                        {% elif loop.index == 2 %} 🥈 
+                        {% elif loop.index == 3 %} 🥉 
+                        {% else %} {{ loop.index }} 
+                        {% endif %}
+                    </td>
+                    <td class="player-name">{{ leader[0] }}</td>
+                    <td class="algorithm">
+                        {% if leader[1] == 'bubble_sort' %} 🫧 Bubble Sort
+                        {% elif leader[1] == 'insertion_sort' %} 📍 Insertion Sort
+                        {% elif leader[1] == 'selection_sort' %} 🎯 Selection Sort
+                        {% elif leader[1] == 'merge_sort' %} 🔀 Merge Sort
+                        {% elif leader[1] == 'quick_sort' %} ⚡ Quick Sort
+                        {% else %} {{ leader[1] }}
+                        {% endif %}
+                    </td>
+                    <td class="efficiency">
+                        <div class="efficiency-bar">
+                            <div class="efficiency-fill" style="width: {{ leader[2] }}%"></div>
+                        </div>
+                        <span>{{ leader[2] }}%</span>
+                    </td>
+                    <td class="level">{{ leader[3] }}</td>
+                    <td class="difficulty">
+                        <span class="difficulty-badge {{ leader[4] }}">{{ leader[4].title() }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if not leaders %}
+        <div class="no-data">
+            <p>🎮 No scores yet. Be the first to play!</p>
+            <a href="/level_selection" class="btn btn-green">Start Playing</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="leaderboard-actions">
+        <a href="/dashboard" class="btn btn-blue">🏠 Back to Dashboard</a>
+        <a href="/level_selection" class="btn btn-green">🎯 Play More</a>
+    </div>
+</div>
+
+<style>
+.leaderboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.subtitle {
+    color: #888;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.leaderboard-stats {
+    margin-bottom: 30px;
+}
+
+.stats-card {
+    background: #1f1f1f;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #2196F3;
+}
+
+.stats-card h3 {
+    margin-top: 0;
+    color: #2196F3;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.leaderboard-table {
+    background: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #2a2a2a;
+}
+
+th {
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+}
+
+.leader-row {
+    border-bottom: 1px solid #333;
+    transition: background 0.3s ease;
+}
+
+.leader-row:hover {
+    background: #2a2a2a;
+}
+
+.leader-row:last-child {
+    border-bottom: none;
+}
+
+td {
+    padding: 15px;
+    color: white;
+}
+
+.rank {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+.player-name {
+    font-weight: bold;
+    color: #2196F3;
+}
+
+.algorithm {
+    font-weight: 500;
+}
+
+.efficiency {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.efficiency-bar {
+    flex: 1;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 100px;
+}
+
+.efficiency-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #2196F3);
+    transition: width 0.3s ease;
+}
+
+.level {
+    text-align: center;
+    font-weight: bold;
+}
+
+.difficulty-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.difficulty-badge.easy {
+    background: #4CAF50;
+    color: white;
+}
+
+.difficulty-badge.medium {
+    background: #FF9800;
+    color: white;
+}
+
+.difficulty-badge.hard {
+    background: #F44336;
+    color: white;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+}
+
+.no-data p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.leaderboard-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+</style>
+{% endblock %}

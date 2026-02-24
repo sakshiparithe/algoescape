@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="welcome-container">
+    <div class="welcome-content">
+        <h1>AlgoVerse</h1>
+        <p class="subtitle">Master Algorithms Through Interactive Learning</p>
+        
+        <div class="start-section">
+            <h2>Start Your Journey</h2>
+            <p class="start-description">Choose how you want to begin learning sorting algorithms</p>
+            
+            <div class="auth-buttons">
+                <a href="/login" class="btn btn-green btn-large">Login to Continue</a>
+                <a href="/register" class="btn btn-blue btn-large">Create Account</a>
+                <a href="/guest" class="btn btn-purple btn-large">Try as Guest</a>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="feature-text">AI-Powered Hints</span>
+            </div>
+            <div class="feature">
+                <span class="feature-text">Progress Tracking</span>
+            </div>
+            <div class="feature">
+                <span class="feature-text">Leaderboard</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.welcome-content {
+    text-align: center;
+    max-width: 600px;
+    padding: 40px;
+    background: rgba(33, 33, 33, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 2px solid #333;
+}
+
+.welcome-content h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #4CAF50, #2196F3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.start-section {
+    margin-bottom: 40px;
+}
+
+.start-section h2 {
+    color: #4CAF50;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.start-description {
+    color: #aaa;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-large {
+    padding: 15px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-purple {
+    background: #9C27B0;
+}
+
+.btn-purple:hover {
+    background: #7B1FA2;
+    transform: translateY(-2px);
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #888;
+    font-size: 14px;
+}
+
+.feature-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="level-selection-container">
+    <h1>Choose Your Challenge</h1>
+    <p class="subtitle">Select an algorithm and difficulty level to begin</p>
+    
+    {% for algorithm, difficulties in algorithms.items() %}
+    <div class="algorithm-section">
+        <h2 class="algo-title">
+            {{ algorithm.replace('_', ' ').title() }}
+        </h2>
+        
+        <div class="difficulties">
+            {% for difficulty, levels in difficulties.items() %}
+            <div class="difficulty-card">
+                <h3 class="difficulty-title {{ difficulty }}">
+                    {{ difficulty.title() }}
+                </h3>
+                
+                <div class="levels-grid">
+                    {% for level in levels %}
+                    {% set is_locked = level.id != 1 and (user_progress.get(algorithm, 0) or 0) < level.id %}
+                    {% if is_locked %}
+                    <div class="level-card locked">
+                        <div class="level-header">
+                            <span class="level-number">Level {{ level.id }}</span>
+                            <span class="level-size">{{ level.size }} elements</span>
+                        </div>
+                        <p class="level-description">{{ level.description }}</p>
+                        <div class="level-stats">
+                            <span class="stat">Range: {{ level.range[0] }}-{{ level.range[1] }}</span>
+                        </div>
+                        <div class="lock-overlay">
+                            <span class="lock-text">Complete Level {{ level.id - 1 }} to unlock</span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="/game/{{ algorithm }}/{{ difficulty }}/{{ level.id }}" class="level-card">
+                        <div class="level-header">
+                            <span class="level-number">Level {{ level.id }}</span>
+                            <span class="level-size">{{ level.size }} elements</span>
+                        </div>
+                        <p class="level-description">{{ level.description }}</p>
+                        <div class="level-stats">
+                            <span class="stat">Range: {{ level.range[0] }}-{{ level.range[1] }}</span>
+                        </div>
+                        {% if user_progress.get(algorithm, 0) >= level.id %}
+                        <div class="completed-badge">Completed</div>
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+.level-selection-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.algorithm-section {
+    margin-bottom: 50px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 30px;
+    border: 2px solid #333;
+}
+
+.algo-title {
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.difficulties {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.difficulty-card {
+    background: #2a2a2a;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid #444;
+}
+
+.difficulty-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.difficulty-title.easy {
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+}
+
+.difficulty-title.medium {
+    color: #FF9800;
+    border-bottom: 2px solid #FF9800;
+}
+
+.difficulty-title.hard {
+    color: #F44336;
+    border-bottom: 2px solid #F44336;
+}
+
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.level-card {
+    background: linear-gradient(135deg, #333, #444);
+    padding: 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: block;
+}
+
+.level-card:hover {
+    transform: translateY(-3px);
+    border-color: #2196F3;
+    box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+}
+
+.level-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.level-card.locked:hover {
+    transform: none;
+    border-color: #666;
+    box-shadow: none;
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    color: white;
+}
+
+.lock-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.lock-text {
+    font-size: 12px;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.completed-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.level-number {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.level-size {
+    background: #2196F3;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.level-description {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.level-stats {
+    font-size: 12px;
+    color: #888;
+}
+
+.stat {
+    display: block;
+    margin-top: 5px;
+}
+</style>
+{% endblock %}
